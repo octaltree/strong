@@ -28,7 +28,6 @@ pub struct Name<T> {
 
 impl<T> Validator for Name<T> {
     type Err = std::convert::Infallible;
-    fn validate(s: &str) -> Result<(), Self::Err> { Ok(()) }
 }
 
 #[cfg(test)]
