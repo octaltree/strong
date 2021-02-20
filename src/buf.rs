@@ -1,12 +1,12 @@
 use crate::Validator;
 use std::marker::PhantomData;
 
-pub struct Strong<Ctx: Validator> {
+pub struct StrongBuf<Ctx: Validator> {
     phantom: PhantomData<Ctx>,
     inner: String
 }
 
-impl<Ctx: Validator> Strong<Ctx> {
+impl<Ctx: Validator> StrongBuf<Ctx> {
     /// creates from [`String`].
     pub fn validate(s: String) -> Result<Self, Ctx::Err> {
         Ctx::validate(&s)?;

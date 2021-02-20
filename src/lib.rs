@@ -3,7 +3,7 @@ mod slice;
 #[cfg(feature = "some_validators")]
 mod validators;
 
-pub use buf::Strong;
+pub use buf::StrongBuf;
 pub use slice::strong;
 #[cfg(feature = "some_validators")]
 pub use validators::*;
