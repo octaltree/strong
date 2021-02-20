@@ -3,6 +3,11 @@ name = "strong"
 version = "0.1.0"
 authors = ["octaltree <octaltree@gmail.com>"]
 edition = "2018"
+description = "Stringly typed String"
+license = "MIT"
+documentation = "https://docs.rs/strong/"
+repository = "https://github.com/octaltree/strong"
+categories = ["Rust patterns"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
