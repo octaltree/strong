@@ -6,7 +6,7 @@ Rust is a statically and strongly typed systems programming language.  We can cr
 struct Age(i32);
 struct Email(String);
 ```
-There is a problem here, there are two types of strings in Rust, and it is hard to create strong types for both String and &str.
+There is a problem here, there are two types of strings in Rust, and it is hard to create strong types for both `String` and `&str`.
 
 STRONG provides two types owned `StrongBuf` and unsized `Strong`.
 ```rust
@@ -16,17 +16,21 @@ fn login(email: &Strong<Email>, password: &strong<Password>) { .. }
 
 let email: StrongBuf<Email> = ..
 let password: StrongBuf<Password> = ..
-login(&email, &password);
+login(&email, password);
 ```
+`Email` requires `some_validators` feature.
 
 ## Getting Started
 ```rust
-use strong::{StrongBuf, Strong, Validator}
+use strong::{StrongBuf, Strong, Validator, Email}
 
 enum Password {}
 impl<T> Validator for Password {
     type Err = std::convert::Infallible;
 }
+
+let email: StrongBuf<Email> = StrongBuf::validate("foo".to_string());
+let password: &Strong<Password> = Strong::validate("bar");
 ```
 
 ## License

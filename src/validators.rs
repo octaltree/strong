@@ -33,21 +33,23 @@ impl<T> Validator for Name<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{Strong, StrongBuf};
+    use crate::Strong;
 
     #[test]
     fn name() {
-        #[derive(Clone, Copy)]
+        #[derive(Debug, Clone, Copy, PartialEq)]
         struct UserId(i32);
         struct User<'a> {
             id: UserId,
-            name: &'a strong<Name<UserId>>
+            name: &'a Strong<Name<UserId>>
         }
-        let name = Strong::<Name<UserId>>::validate("Alice").unwrap();
-        let _ = User {
+        let name: &Strong<Name<UserId>> = Strong::validate("Alice").unwrap();
+        let u = User {
             id: UserId(3),
             name
         };
+        assert_eq!(u.id, UserId(3));
+        assert_eq!(u.name.as_str(), "Alice");
     }
 
     #[test]
