@@ -8,7 +8,7 @@ pub struct StrongBuf<Ctx: Validator> {
 }
 
 impl<Ctx: Validator> StrongBuf<Ctx> {
-    /// creates from [`String`].
+    /// construct from [`String`].
     #[inline]
     pub fn validate(s: String) -> Result<Self, Ctx::Err> {
         Ctx::validate(&s)?;
@@ -23,6 +23,7 @@ impl<Ctx: Validator> StrongBuf<Ctx> {
         }
     }
 
+    /// convert to [`String`].
     pub fn into_string(self) -> String { self.inner }
 
     #[inline]

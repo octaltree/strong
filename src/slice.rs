@@ -1,6 +1,7 @@
 use crate::{StrongBuf, Validator};
 use std::marker::PhantomData;
 
+/// Strongly typed [`str`]
 #[allow(non_camel_case_types)]
 #[repr(transparent)]
 pub struct Strong<Ctx: Validator> {
@@ -9,6 +10,7 @@ pub struct Strong<Ctx: Validator> {
 }
 
 impl<Ctx: Validator> Strong<Ctx> {
+    /// construct from [`str`].
     pub fn validate<S: AsRef<str> + ?Sized>(s: &S) -> Result<&Self, Ctx::Err> {
         Ctx::validate(s.as_ref())?;
         Ok(Self::without_validate(s))
@@ -18,6 +20,7 @@ impl<Ctx: Validator> Strong<Ctx> {
         unsafe { &*(s.as_ref() as *const str as *const Self) }
     }
 
+    /// convert to [`str`].
     pub fn as_str(&self) -> &str { &self.inner }
 
     pub fn to_strong_buf(&self) -> StrongBuf<Ctx> {
