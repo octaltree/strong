@@ -1,4 +1,4 @@
-# STRONG
+# STRONG &emsp; [![crates.io](https://img.shields.io/crates/v/strong)](https://crates.io/crates/strong) ![MIT](https://img.shields.io/crates/l/strong)
 <p><strong>Stringly typed String for Rust</strong></p>
 
 Rust is a statically and strongly typed systems programming language.  We can create a new type wrapping primitives.
