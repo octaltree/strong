@@ -4,7 +4,7 @@ mod slice;
 mod validators;
 
 pub use buf::StrongBuf;
-pub use slice::strong;
+pub use slice::Strong;
 #[cfg(feature = "some_validators")]
 pub use validators::*;
 

@@ -1,4 +1,5 @@
 use crate::Validator;
+use std::marker::PhantomData;
 use thiserror::Error;
 
 #[derive(Debug, Error)]
@@ -21,14 +22,38 @@ impl Validator for Email {
     }
 }
 
+pub struct Name<T> {
+    phantom: PhantomData<T>
+}
+
+impl<T> Validator for Name<T> {
+    type Err = std::convert::Infallible;
+    fn validate(s: &str) -> Result<(), Self::Err> { Ok(()) }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::Strong;
+    use crate::{Strong, StrongBuf};
+
+    #[test]
+    fn name() {
+        #[derive(Clone, Copy)]
+        struct UserId(i32);
+        struct User<'a> {
+            id: UserId,
+            name: &'a strong<Name<UserId>>
+        }
+        let name = Strong::<Name<UserId>>::validate("Alice").unwrap();
+        let _ = User {
+            id: UserId(3),
+            name
+        };
+    }
 
     #[test]
     fn email() {
-        assert!(Strong::<Email>::validate("a".to_string()).is_err());
-        Strong::<Email>::validate("a@example.com".to_string()).unwrap();
+        assert!(Strong::<Email>::validate("a").is_err());
+        Strong::<Email>::validate("a@example.com").unwrap();
     }
 }
