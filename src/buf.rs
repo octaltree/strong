@@ -49,10 +49,7 @@ mod imp {
     }
 }
 
-impl<Ctx> StrongBuf<Ctx>
-where
-    Ctx: Validator
-{
+impl<Ctx: Validator> StrongBuf<Ctx> {
     /// Constructs from [`Vec<u8>`] without validation.
     /// ## Safety
     /// This function allows us to create invalid [`StrongBuf`].
