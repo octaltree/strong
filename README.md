@@ -10,7 +10,7 @@ There is a problem here, there are two types of strings in Rust, and it is hard 
 
 STRONG provides two types owned `StrongBuf` and unsized `Strong`.
 ```rust
-use strong::{StrongBuf, Strong, Email, Validator}
+use strong::{StrongBuf, Strong, Validator, validators::Email}
 
 fn login(email: &Strong<Email>, password: &strong<Password>) { .. }
 
@@ -22,7 +22,7 @@ login(&email, password);
 
 ## Getting Started
 ```rust
-use strong::{StrongBuf, Strong, Validator, Email}
+use strong::{StrongBuf, Strong, Validator, validators::Email}
 
 enum Password {}
 impl<T> Validator for Password {

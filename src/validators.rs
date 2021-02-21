@@ -10,7 +10,6 @@ pub struct InvalidEmail {
 
 pub enum Email {}
 
-impl CloneTransparent for Email {}
 impl PartialEqTransparent for Email {}
 impl EqTransparent for Email {}
 impl PartialOrdTransparent for Email {}
@@ -34,7 +33,6 @@ pub struct Name<T> {
 }
 
 impl<T> DefaultTransparent for Name<T> {}
-impl<T> CloneTransparent for Name<T> {}
 impl<T> PartialEqTransparent for Name<T> {}
 impl<T> EqTransparent for Name<T> {}
 impl<T> PartialOrdTransparent for Name<T> {}
