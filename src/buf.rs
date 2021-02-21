@@ -12,11 +12,14 @@ impl<Ctx: Validator> StrongBuf<Ctx> {
     #[inline]
     pub fn validate(s: String) -> Result<Self, Ctx::Err> {
         Ctx::validate(&s)?;
-        Ok(unsafe { Self::without_validate(s) })
+        Ok(unsafe { Self::no_validate(s) })
     }
 
+    /// Construct from [`String`] without validation.
+    /// ## Safety
+    /// This function allows us to create invalid [`StrongBuf`].
     #[inline]
-    pub unsafe fn without_validate(s: String) -> Self {
+    pub unsafe fn no_validate(s: String) -> Self {
         Self {
             inner: s,
             phantom: PhantomData
@@ -34,7 +37,7 @@ impl<Ctx: Validator> StrongBuf<Ctx> {
 
     #[inline]
     pub(crate) unsafe fn from_utf8_unchecked(bytes: Vec<u8>) -> Self {
-        Self::without_validate(String::from_utf8_unchecked(bytes))
+        Self::no_validate(String::from_utf8_unchecked(bytes))
     }
 
     #[inline]
@@ -46,7 +49,7 @@ impl<Ctx: Validator> StrongBuf<Ctx> {
 impl<Ctx: Validator> Deref for StrongBuf<Ctx> {
     type Target = Strong<Ctx>;
     #[inline]
-    fn deref(&self) -> &Strong<Ctx> { unsafe { Strong::without_validate(&self.inner) } }
+    fn deref(&self) -> &Strong<Ctx> { unsafe { Strong::no_validate(&self.inner) } }
 }
 
 impl<Ctx: Validator> std::borrow::Borrow<Strong<Ctx>> for StrongBuf<Ctx> {

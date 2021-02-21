@@ -13,18 +13,27 @@ impl<Ctx: Validator> Strong<Ctx> {
     /// construct from [`str`].
     pub fn validate<S: AsRef<str> + ?Sized>(s: &S) -> Result<&Self, Ctx::Err> {
         Ctx::validate(s.as_ref())?;
-        Ok(unsafe { Self::without_validate(s) })
+        Ok(unsafe { Self::no_validate(s) })
     }
 
-    pub unsafe fn without_validate<S: AsRef<str> + ?Sized>(s: &S) -> &Self {
+    /// Construct from [`str`] without validation.
+    /// ## Safety
+    /// This function allows us to create invalid [`Strong`].
+    pub unsafe fn no_validate<S: AsRef<str> + ?Sized>(s: &S) -> &Self {
         &*(s.as_ref() as *const str as *const Self)
+    }
+
+    /// Re-validates self
+    pub fn valid(&self) -> Result<&Self, Ctx::Err> {
+        Ctx::validate(&self.inner)?;
+        Ok(&self)
     }
 
     /// convert to [`str`].
     pub fn as_str(&self) -> &str { &self.inner }
 
     pub fn to_strong_buf(&self) -> StrongBuf<Ctx> {
-        unsafe { StrongBuf::without_validate(self.inner.to_string()) }
+        unsafe { StrongBuf::no_validate(self.inner.to_string()) }
     }
 
     // FIXME: const?
