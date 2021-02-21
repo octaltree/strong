@@ -15,5 +15,6 @@ pub use validators::*;
 pub trait Validator {
     type Err: std::fmt::Debug;
     #[allow(unused_variables)]
+    #[inline]
     fn validate(raw: &str) -> Result<(), Self::Err> { Ok(()) }
 }

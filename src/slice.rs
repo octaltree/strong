@@ -1,44 +1,56 @@
 use crate::{StrongBuf, Validator};
-use std::marker::PhantomData;
 
-/// Strongly typed [`str`]
-#[allow(non_camel_case_types)]
-#[repr(transparent)]
-pub struct Strong<Ctx: Validator> {
-    phantom: PhantomData<Ctx>,
-    inner: str
+pub use imp::Strong;
+
+mod imp {
+    use crate::Validator;
+    use std::marker::PhantomData;
+
+    /// Strongly typed [`str`]
+    #[allow(non_camel_case_types)]
+    #[repr(transparent)]
+    pub struct Strong<Ctx: Validator> {
+        phantom: PhantomData<Ctx>,
+        inner: str
+    }
+
+    impl<Ctx: Validator> Strong<Ctx> {
+        /// Constructs from [`str`].
+        #[inline]
+        pub fn validate<S: AsRef<str> + ?Sized>(s: &S) -> Result<&Self, Ctx::Err> {
+            Ctx::validate(s.as_ref())?;
+            Ok(unsafe { Self::no_validate(s) })
+        }
+
+        /// Constructs from [`str`] without validation.
+        /// ## Safety
+        /// This function allows us to create invalid [`Strong`].
+        #[inline]
+        pub unsafe fn no_validate<S: AsRef<str> + ?Sized>(s: &S) -> &Self {
+            &*(s.as_ref() as *const str as *const Self)
+        }
+
+        /// Converts to [`str`].
+        #[inline]
+        pub fn as_str(&self) -> &str { &self.inner }
+
+        // TODO: const?
+        #[inline(always)]
+        pub fn as_bytes(&self) -> &[u8] { self.inner.as_bytes() }
+    }
 }
 
 impl<Ctx: Validator> Strong<Ctx> {
-    /// construct from [`str`].
-    pub fn validate<S: AsRef<str> + ?Sized>(s: &S) -> Result<&Self, Ctx::Err> {
-        Ctx::validate(s.as_ref())?;
-        Ok(unsafe { Self::no_validate(s) })
-    }
-
-    /// Construct from [`str`] without validation.
-    /// ## Safety
-    /// This function allows us to create invalid [`Strong`].
-    pub unsafe fn no_validate<S: AsRef<str> + ?Sized>(s: &S) -> &Self {
-        &*(s.as_ref() as *const str as *const Self)
-    }
-
     /// Re-validates self
     pub fn valid(&self) -> Result<&Self, Ctx::Err> {
-        Ctx::validate(&self.inner)?;
+        Ctx::validate(self.as_str())?;
         Ok(&self)
     }
 
-    /// convert to [`str`].
-    pub fn as_str(&self) -> &str { &self.inner }
-
+    /// Converts to [`StrongBuf`].
     pub fn to_strong_buf(&self) -> StrongBuf<Ctx> {
-        unsafe { StrongBuf::no_validate(self.inner.to_string()) }
+        unsafe { StrongBuf::no_validate(self.as_str().to_string()) }
     }
-
-    // FIXME: const?
-    #[inline(always)]
-    pub fn as_bytes(&self) -> &[u8] { self.inner.as_bytes() }
 }
 
 impl<Ctx: Validator> ToOwned for Strong<Ctx> {
@@ -49,3 +61,7 @@ impl<Ctx: Validator> ToOwned for Strong<Ctx> {
     }
     // TODO: clone_into
 }
+
+mod impl_fmt;
+mod impl_hash;
+mod impl_ord;
