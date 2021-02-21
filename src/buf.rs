@@ -2,6 +2,7 @@ use crate::{Strong, Validator};
 use std::{marker::PhantomData, ops::Deref};
 
 /// Strongly typed [`String`]
+#[derive(Clone)]
 pub struct StrongBuf<Ctx: Validator> {
     phantom: PhantomData<Ctx>,
     inner: String
@@ -24,12 +25,6 @@ impl<Ctx: Validator> StrongBuf<Ctx> {
             inner: s,
             phantom: PhantomData
         }
-    }
-
-    /// Re-validates self
-    pub fn valid(self) -> Result<Self, Ctx::Err> {
-        Ctx::validate(&self.inner)?;
-        Ok(self)
     }
 
     /// Converts to [`String`].
@@ -57,7 +52,6 @@ impl<Ctx: Validator> std::borrow::Borrow<Strong<Ctx>> for StrongBuf<Ctx> {
     fn borrow(&self) -> &Strong<Ctx> { self.deref() }
 }
 
-mod impl_clone;
 mod impl_default;
 mod impl_fmt;
 mod impl_hash;
