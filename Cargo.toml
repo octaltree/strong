@@ -18,3 +18,6 @@ thiserror = { version = "1.0.24", optional = true }
 [features]
 default = []
 some_validators = ["validator", "thiserror"]
+
+[package.metadata.docs.rs]
+features = ["some_validators"]

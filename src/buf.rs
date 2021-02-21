@@ -8,22 +8,28 @@ pub struct StrongBuf<Ctx: Validator> {
 }
 
 impl<Ctx: Validator> StrongBuf<Ctx> {
-    /// construct from [`String`].
+    /// Constructs from [`String`].
     #[inline]
     pub fn validate(s: String) -> Result<Self, Ctx::Err> {
         Ctx::validate(&s)?;
-        Ok(Self::without_validate(s))
+        Ok(unsafe { Self::without_validate(s) })
     }
 
     #[inline]
-    pub fn without_validate(s: String) -> Self {
+    pub unsafe fn without_validate(s: String) -> Self {
         Self {
             inner: s,
             phantom: PhantomData
         }
     }
 
-    /// convert to [`String`].
+    /// Re-validates self
+    pub fn valid(self) -> Result<Self, Ctx::Err> {
+        Ctx::validate(&self.inner)?;
+        Ok(self)
+    }
+
+    /// Converts to [`String`].
     pub fn into_string(self) -> String { self.inner }
 
     #[inline]
@@ -40,10 +46,16 @@ impl<Ctx: Validator> StrongBuf<Ctx> {
 impl<Ctx: Validator> Deref for StrongBuf<Ctx> {
     type Target = Strong<Ctx>;
     #[inline]
-    fn deref(&self) -> &Strong<Ctx> { Strong::without_validate(&self.inner) }
+    fn deref(&self) -> &Strong<Ctx> { unsafe { Strong::without_validate(&self.inner) } }
 }
 
 impl<Ctx: Validator> std::borrow::Borrow<Strong<Ctx>> for StrongBuf<Ctx> {
     #[inline]
     fn borrow(&self) -> &Strong<Ctx> { self.deref() }
 }
+
+mod impl_clone;
+mod impl_default;
+mod impl_fmt;
+mod impl_hash;
+mod impl_ord;
