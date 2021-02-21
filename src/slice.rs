@@ -55,7 +55,10 @@ impl<Ctx: Validator> Strong<Ctx> {
     // TODO: Should I implement str methods?
 }
 
-impl<Ctx: Validator> ToOwned for Strong<Ctx> {
+impl<Ctx> ToOwned for Strong<Ctx>
+where
+    Ctx: Validator
+{
     type Owned = StrongBuf<Ctx>;
     #[inline]
     fn to_owned(&self) -> StrongBuf<Ctx> {

@@ -4,25 +4,37 @@ use crate::{
 };
 use std::fmt;
 
-impl<Ctx: Validator + DebugTransparent> fmt::Debug for Strong<Ctx> {
+impl<Ctx> fmt::Debug for Strong<Ctx>
+where
+    Ctx: Validator + DebugTransparent
+{
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         fmt::Debug::fmt(self.as_str(), formatter)
     }
 }
 
-impl<Ctx: Validator + DisplayTransparent> fmt::Display for Strong<Ctx> {
+impl<Ctx> fmt::Display for Strong<Ctx>
+where
+    Ctx: Validator + DisplayTransparent
+{
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         fmt::Display::fmt(self.as_str(), formatter)
     }
 }
 
-impl<Ctx: Validator + DebugTransparent> fmt::Debug for StrongBuf<Ctx> {
+impl<Ctx> fmt::Debug for StrongBuf<Ctx>
+where
+    Ctx: Validator + DebugTransparent
+{
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         fmt::Debug::fmt(self.as_str(), formatter)
     }
 }
 
-impl<Ctx: Validator + DisplayTransparent> fmt::Display for StrongBuf<Ctx> {
+impl<Ctx> fmt::Display for StrongBuf<Ctx>
+where
+    Ctx: Validator + DisplayTransparent
+{
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         fmt::Display::fmt(self.as_str(), formatter)
     }
