@@ -1,5 +1,5 @@
 //! impl From, TryFrom
-use crate::{StrongBuf, Validator};
+use crate::{Strong, StrongBuf, Validator};
 use std::{convert::TryFrom, str::FromStr};
 
 impl<Ctx> TryFrom<String> for StrongBuf<Ctx>
@@ -16,6 +16,13 @@ where
 {
     type Err = Ctx::Err;
     fn from_str(s: &str) -> Result<Self, Self::Err> { Self::validate(s.to_string()) }
+}
+
+impl<Ctx> AsRef<Strong<Ctx>> for StrongBuf<Ctx>
+where
+    Ctx: Validator
+{
+    fn as_ref(&self) -> &Strong<Ctx> { self }
 }
 
 // TODO: Box, Rc, Arc, Cow
