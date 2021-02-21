@@ -21,7 +21,7 @@ mod imp {
             Ok(unsafe { Self::no_validate(s) })
         }
 
-        /// Construct from [`String`] without validation.
+        /// Constructs from [`String`] without validation.
         /// ## Safety
         /// This function allows us to create invalid [`StrongBuf`].
         #[inline]
@@ -48,8 +48,11 @@ mod imp {
 }
 
 impl<Ctx: Validator> StrongBuf<Ctx> {
+    /// Constructs from [`Vec<u8>`] without validation.
+    /// ## Safety
+    /// This function allows us to create invalid [`StrongBuf`].
     #[inline]
-    pub(crate) unsafe fn from_utf8_unchecked(bytes: Vec<u8>) -> Self {
+    pub unsafe fn from_utf8_unchecked(bytes: Vec<u8>) -> Self {
         Self::no_validate(String::from_utf8_unchecked(bytes))
     }
 
