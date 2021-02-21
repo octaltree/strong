@@ -35,6 +35,9 @@ let password: &Strong<Password> = Strong::validate("bar");
 
 ### Shorthand
 With `shorthand` feature, `Str` and `S` are exported and can be substituted for `StrongBuf` and `Strong`.
+```rust
+let email: &S<Email> = S::validate("foo");
+```
 
 ## License
 Licensed under MIT license ([LICENSE-MIT](LICENSE-MIT) or https://opensource.org/licenses/MIT)
