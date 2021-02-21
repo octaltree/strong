@@ -19,3 +19,9 @@ pub trait Validator {
     #[inline]
     fn validate(raw: &str) -> Result<(), Self::Err> { Ok(()) }
 }
+
+#[cfg(feature = "shorthand")]
+pub use StrongBuf as Str;
+
+#[cfg(feature = "shorthand")]
+pub use Strong as S;

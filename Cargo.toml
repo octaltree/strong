@@ -7,7 +7,8 @@ description = "Strongly typed String"
 license = "MIT"
 documentation = "https://docs.rs/strong/"
 repository = "https://github.com/octaltree/strong"
-categories = ["rust-patterns"]
+categories = ["rust-patterns", "web-programming"]
+keywords = ["validation"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -18,6 +19,7 @@ thiserror = { version = "1.0.24", optional = true }
 [features]
 default = []
 some_validators = ["validator", "thiserror"]
+shorthand = []
 
 [package.metadata.docs.rs]
 features = ["some_validators"]

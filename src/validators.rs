@@ -46,7 +46,7 @@ impl<T> Validator for Name<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::Strong;
+    use crate::Strong as S;
 
     #[test]
     fn name() {
@@ -54,9 +54,9 @@ mod tests {
         struct UserId(i32);
         struct User<'a> {
             id: UserId,
-            name: &'a Strong<Name<UserId>>
+            name: &'a S<Name<UserId>>
         }
-        let name: &Strong<Name<UserId>> = Strong::validate("Alice").unwrap();
+        let name: &S<Name<UserId>> = S::validate("Alice").unwrap();
         let u = User {
             id: UserId(3),
             name
@@ -67,7 +67,7 @@ mod tests {
 
     #[test]
     fn email() {
-        assert!(Strong::<Email>::validate("a").is_err());
-        Strong::<Email>::validate("a@example.com").unwrap();
+        assert!(S::<Email>::validate("a").is_err());
+        S::<Email>::validate("a@example.com").unwrap();
     }
 }
