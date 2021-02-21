@@ -7,7 +7,6 @@ mod imp {
     use std::{marker::PhantomData, ops::Deref};
 
     /// Strongly typed [`String`]
-    #[derive(Clone)]
     pub struct StrongBuf<Ctx: Validator> {
         phantom: PhantomData<Ctx>,
         inner: String
@@ -40,14 +39,20 @@ mod imp {
         pub fn as_strong(&self) -> &Strong<Ctx> { self }
     }
 
-    impl<Ctx: Validator> Deref for StrongBuf<Ctx> {
+    impl<Ctx> Deref for StrongBuf<Ctx>
+    where
+        Ctx: Validator
+    {
         type Target = Strong<Ctx>;
         #[inline]
         fn deref(&self) -> &Strong<Ctx> { unsafe { Strong::no_validate(&self.inner) } }
     }
 }
 
-impl<Ctx: Validator> StrongBuf<Ctx> {
+impl<Ctx> StrongBuf<Ctx>
+where
+    Ctx: Validator
+{
     /// Constructs from [`Vec<u8>`] without validation.
     /// ## Safety
     /// This function allows us to create invalid [`StrongBuf`].
@@ -59,7 +64,18 @@ impl<Ctx: Validator> StrongBuf<Ctx> {
     // TODO: Should I implement String methods?
 }
 
-impl<Ctx: Validator> std::borrow::Borrow<Strong<Ctx>> for StrongBuf<Ctx> {
+impl<Ctx> std::borrow::Borrow<Strong<Ctx>> for StrongBuf<Ctx>
+where
+    Ctx: Validator
+{
     #[inline]
     fn borrow(&self) -> &Strong<Ctx> { self }
+}
+
+impl<Ctx> Clone for StrongBuf<Ctx>
+where
+    Ctx: Validator
+{
+    #[inline]
+    fn clone(&self) -> Self { unsafe { Self::from_utf8_unchecked(self.as_bytes().to_owned()) } }
 }
