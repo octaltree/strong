@@ -9,3 +9,8 @@ pub trait OrdTransparent {}
 pub trait HashTransparent {}
 pub trait DebugTransparent {}
 pub trait DisplayTransparent {}
+
+mod impl_default;
+mod impl_fmt;
+mod impl_hash;
+mod impl_ord;

@@ -34,7 +34,7 @@ mod imp {
         #[inline]
         pub fn as_str(&self) -> &str { &self.inner }
 
-        // TODO: const?
+        // const?
         #[inline(always)]
         pub fn as_bytes(&self) -> &[u8] { self.inner.as_bytes() }
     }
@@ -51,6 +51,8 @@ impl<Ctx: Validator> Strong<Ctx> {
     pub fn to_strong_buf(&self) -> StrongBuf<Ctx> {
         unsafe { StrongBuf::no_validate(self.as_str().to_string()) }
     }
+
+    // TODO: Should I implement str methods?
 }
 
 impl<Ctx: Validator> ToOwned for Strong<Ctx> {
@@ -59,9 +61,5 @@ impl<Ctx: Validator> ToOwned for Strong<Ctx> {
     fn to_owned(&self) -> StrongBuf<Ctx> {
         unsafe { StrongBuf::from_utf8_unchecked(self.as_bytes().to_owned()) }
     }
-    // TODO: clone_into
+    // clone_into
 }
-
-mod impl_fmt;
-mod impl_hash;
-mod impl_ord;

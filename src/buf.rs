@@ -60,8 +60,3 @@ impl<Ctx: Validator> std::borrow::Borrow<Strong<Ctx>> for StrongBuf<Ctx> {
     #[inline]
     fn borrow(&self) -> &Strong<Ctx> { self }
 }
-
-mod impl_default;
-mod impl_fmt;
-mod impl_hash;
-mod impl_ord;
