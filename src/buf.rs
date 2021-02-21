@@ -8,7 +8,7 @@ pub struct StrongBuf<Ctx: Validator> {
 }
 
 impl<Ctx: Validator> StrongBuf<Ctx> {
-    /// construct from [`String`].
+    /// Constructs from [`String`].
     #[inline]
     pub fn validate(s: String) -> Result<Self, Ctx::Err> {
         Ctx::validate(&s)?;
@@ -23,7 +23,13 @@ impl<Ctx: Validator> StrongBuf<Ctx> {
         }
     }
 
-    /// convert to [`String`].
+    /// Re-validates self
+    pub fn valid(self) -> Result<Self, Ctx::Err> {
+        Ctx::validate(&self.inner)?;
+        Ok(self)
+    }
+
+    /// Converts to [`String`].
     pub fn into_string(self) -> String { self.inner }
 
     #[inline]
@@ -48,4 +54,8 @@ impl<Ctx: Validator> std::borrow::Borrow<Strong<Ctx>> for StrongBuf<Ctx> {
     fn borrow(&self) -> &Strong<Ctx> { self.deref() }
 }
 
+mod impl_clone;
 mod impl_default;
+mod impl_fmt;
+mod impl_hash;
+mod impl_ord;

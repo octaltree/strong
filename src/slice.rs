@@ -38,4 +38,5 @@ impl<Ctx: Validator> ToOwned for Strong<Ctx> {
     fn to_owned(&self) -> StrongBuf<Ctx> {
         unsafe { StrongBuf::from_utf8_unchecked(self.as_bytes().to_owned()) }
     }
+    // TODO: clone_into
 }
