@@ -10,6 +10,14 @@ where
     fn try_from(s: String) -> Result<Self, Self::Error> { Self::validate(s) }
 }
 
+impl<'a, Ctx> TryFrom<&'a str> for &'a Strong<Ctx>
+where
+    Ctx: Validator
+{
+    type Error = Ctx::Err;
+    fn try_from(s: &'a str) -> Result<Self, Self::Error> { Strong::validate(s) }
+}
+
 impl<Ctx> FromStr for StrongBuf<Ctx>
 where
     Ctx: Validator
