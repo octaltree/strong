@@ -1,4 +1,4 @@
-use crate::{marker::*, Validator};
+use crate::{marker::*, StrongBuf, Validator};
 use std::marker::PhantomData;
 use thiserror::Error;
 
@@ -32,7 +32,6 @@ pub struct Name<T> {
     phantom: PhantomData<T>
 }
 
-impl<T> DefaultTransparent for Name<T> {}
 impl<T> PartialEqTransparent for Name<T> {}
 impl<T> EqTransparent for Name<T> {}
 impl<T> PartialOrdTransparent for Name<T> {}
@@ -41,6 +40,10 @@ impl<T> HashTransparent for Name<T> {}
 
 impl<T> Validator for Name<T> {
     type Err = std::convert::Infallible;
+}
+
+impl<T> Default for StrongBuf<Name<T>> {
+    fn default() -> Self { unsafe { Self::no_validate(String::new()) } }
 }
 
 #[cfg(test)]
