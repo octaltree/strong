@@ -13,6 +13,8 @@ pub mod marker;
 mod impl_convert;
 #[cfg(feature = "diesel")]
 mod impl_diesel;
+#[cfg(feature = "juniper")]
+mod impl_juniper;
 #[cfg(feature = "serde")]
 mod impl_serde;
 
