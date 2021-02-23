@@ -65,6 +65,12 @@ impl<Ctx: Validator> StrongBuf<Ctx> {
         Self::no_validate(String::from_utf8_unchecked(bytes))
     }
 
+    #[inline]
+    pub fn into_boxed_strong(self) -> Box<Strong<Ctx>> {
+        let rw = Box::into_raw(self.into_string().into_boxed_str()) as *mut Strong<Ctx>;
+        unsafe { Box::from_raw(rw) }
+    }
+
     // TODO: Should I implement String methods?
 }
 
