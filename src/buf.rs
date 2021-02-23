@@ -7,6 +7,7 @@ mod imp {
     use std::{marker::PhantomData, ops::Deref};
 
     /// Strongly typed [`String`]
+    #[cfg_attr(feature = "diesel", derive(FromSqlRow))]
     pub struct StrongBuf<Ctx: Validator> {
         phantom: PhantomData<Ctx>,
         inner: String

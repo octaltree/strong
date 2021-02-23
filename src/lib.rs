@@ -1,3 +1,7 @@
+#[cfg(feature = "diesel")]
+#[macro_use]
+extern crate diesel;
+
 mod buf;
 mod slice;
 pub use buf::StrongBuf;
