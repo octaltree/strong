@@ -10,34 +10,34 @@ There is a problem here, there are two types of strings in Rust, and it is hard 
 
 STRONG provides two types owned `StrongBuf` and unsized `Strong`.
 ```rust
-use strong::{StrongBuf, Strong, Validator, validators::Email}
+use strong::{validators::Email, Strong, StrongBuf, Validator};
 
-fn login(email: &Strong<Email>, password: &strong<Password>) { .. }
+fn login(email: &Strong<Email>, password: &Strong<Password>) { .. }
 
 let email: StrongBuf<Email> = ..
 let password: StrongBuf<Password> = ..
-login(&email, password);
+login(&email, &password);
 ```
 `Email` requires `some_validators` feature.
 
 ## Getting Started
 ```rust
-use strong::{StrongBuf, Strong, Validator, validators::Email}
+use strong::{validators::Email, Strong, StrongBuf, Validator};
 
 enum Password {}
-impl<T> Validator for Password {
+impl Validator for Password {
     type Err = std::convert::Infallible;
 }
 
-let email: StrongBuf<Email> = StrongBuf::validate("foo".to_string());
-let password: &Strong<Password> = Strong::validate("bar");
+let email: StrongBuf<Email> = StrongBuf::<Email>::validate("a".into()).unwrap();
+let password: &Strong<Password> = Strong::<Password>::validate("b").unwrap();
 ```
 
 ### Shorthand
 With `shorthand` feature, `Str` and `S` are exported and can be substituted for `StrongBuf` and `Strong`.
 ```rust
-let email: StrongBuf<Email> = StrongBuf::validate("foo".to_string());
-let email: Str<Email> = Str::validate("foo".to_string());
+let email: StrongBuf<Email> = StrongBuf::validate("foo".to_string()).unwrap();
+let email: Str<Email> = Str::validate("foo".to_string()).unwrap();
 ```
 
 ## License
