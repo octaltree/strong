@@ -3,7 +3,8 @@ use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 impl<'de, Ctx> Deserialize<'de> for StrongBuf<Ctx>
 where
-    Ctx: Validator
+    Ctx: Validator,
+    Ctx::Err: std::fmt::Display
 {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
@@ -16,7 +17,8 @@ where
 
 impl<'de, Ctx> Deserialize<'de> for &'de Strong<Ctx>
 where
-    Ctx: Validator
+    Ctx: Validator,
+    Ctx::Err: std::fmt::Display
 {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where

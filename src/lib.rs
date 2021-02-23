@@ -11,6 +11,8 @@ pub use slice::Strong;
 pub mod marker;
 
 mod impl_convert;
+#[cfg(feature = "diesel")]
+mod impl_diesel;
 #[cfg(feature = "serde")]
 mod impl_serde;
 
@@ -20,7 +22,7 @@ pub mod validators;
 
 /// For [`Strong`]
 pub trait Validator {
-    type Err: std::fmt::Debug + std::fmt::Display;
+    type Err;
     #[allow(unused_variables)]
     #[inline]
     fn validate(raw: &str) -> Result<(), Self::Err> { Ok(()) }
