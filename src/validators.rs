@@ -1,4 +1,4 @@
-use crate::{marker::*, Validator};
+use crate::{marker::*, StrongBuf, Validator};
 use std::marker::PhantomData;
 use thiserror::Error;
 
@@ -8,6 +8,7 @@ pub struct InvalidEmail {
     raw: String
 }
 
+#[cfg_attr(feature = "diesel", derive(SqlType, QueryId))]
 pub enum Email {}
 
 impl PartialEqTransparent for Email {}
@@ -15,6 +16,8 @@ impl EqTransparent for Email {}
 impl PartialOrdTransparent for Email {}
 impl OrdTransparent for Email {}
 impl HashTransparent for Email {}
+impl DebugTransparent for Email {}
+impl DisplayTransparent for Email {}
 
 impl Validator for Email {
     type Err = InvalidEmail;
@@ -28,25 +31,31 @@ impl Validator for Email {
     }
 }
 
+#[cfg_attr(feature = "diesel", derive(SqlType, QueryId))]
 pub struct Name<T> {
     phantom: PhantomData<T>
 }
 
-impl<T> DefaultTransparent for Name<T> {}
 impl<T> PartialEqTransparent for Name<T> {}
 impl<T> EqTransparent for Name<T> {}
 impl<T> PartialOrdTransparent for Name<T> {}
 impl<T> OrdTransparent for Name<T> {}
 impl<T> HashTransparent for Name<T> {}
+impl<T> DebugTransparent for Name<T> {}
+impl<T> DisplayTransparent for Name<T> {}
 
 impl<T> Validator for Name<T> {
     type Err = std::convert::Infallible;
 }
 
+impl<T> Default for StrongBuf<Name<T>> {
+    fn default() -> Self { unsafe { Self::no_validate(String::new()) } }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::Strong as S;
+    use crate::{Strong as S, *};
 
     #[test]
     fn name() {
@@ -56,7 +65,7 @@ mod tests {
             id: UserId,
             name: &'a S<Name<UserId>>
         }
-        let name: &S<Name<UserId>> = S::validate("Alice").unwrap();
+        let name: &S<Name<UserId>> = TryFrom::try_from("Alice").unwrap();
         let u = User {
             id: UserId(3),
             name
@@ -67,7 +76,7 @@ mod tests {
 
     #[test]
     fn email() {
-        assert!(S::<Email>::validate("a").is_err());
-        S::<Email>::validate("a@example.com").unwrap();
+        assert!(StrongBuf::<Email>::validate("a".to_string()).is_err());
+        let _: StrongBuf<Email> = TryFrom::try_from("a@example.com".to_string()).unwrap();
     }
 }
