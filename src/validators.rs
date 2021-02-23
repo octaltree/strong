@@ -1,4 +1,4 @@
-use crate::{marker::*, StrongBuf, Validator};
+use crate::{StrongBuf, Validator};
 use std::marker::PhantomData;
 use thiserror::Error;
 
@@ -11,13 +11,20 @@ pub struct InvalidEmail {
 #[cfg_attr(feature = "diesel", derive(SqlType, QueryId))]
 pub enum Email {}
 
-impl PartialEqTransparent for Email {}
-impl EqTransparent for Email {}
-impl PartialOrdTransparent for Email {}
-impl OrdTransparent for Email {}
-impl HashTransparent for Email {}
-impl DebugTransparent for Email {}
-impl DisplayTransparent for Email {}
+#[cfg(not(feature = "impl_partial_eq_transparent"))]
+impl crate::marker::PartialEqTransparent for Email {}
+#[cfg(not(feature = "impl_eq_transparent"))]
+impl crate::marker::EqTransparent for Email {}
+#[cfg(not(feature = "impl_partial_ord_transparent"))]
+impl crate::marker::PartialOrdTransparent for Email {}
+#[cfg(not(feature = "impl_ord_transparent"))]
+impl crate::marker::OrdTransparent for Email {}
+#[cfg(not(feature = "impl_hash_transparent"))]
+impl crate::marker::HashTransparent for Email {}
+#[cfg(not(feature = "impl_debug_transparent"))]
+impl crate::marker::DebugTransparent for Email {}
+#[cfg(not(feature = "impl_display_transparent"))]
+impl crate::marker::DisplayTransparent for Email {}
 
 impl Validator for Email {
     type Err = InvalidEmail;
@@ -36,13 +43,20 @@ pub struct Name<T> {
     phantom: PhantomData<T>
 }
 
-impl<T> PartialEqTransparent for Name<T> {}
-impl<T> EqTransparent for Name<T> {}
-impl<T> PartialOrdTransparent for Name<T> {}
-impl<T> OrdTransparent for Name<T> {}
-impl<T> HashTransparent for Name<T> {}
-impl<T> DebugTransparent for Name<T> {}
-impl<T> DisplayTransparent for Name<T> {}
+#[cfg(not(feature = "impl_partial_eq_transparent"))]
+impl<T> crate::marker::PartialEqTransparent for Name<T> {}
+#[cfg(not(feature = "impl_eq_transparent"))]
+impl<T> crate::marker::EqTransparent for Name<T> {}
+#[cfg(not(feature = "impl_partial_ord_transparent"))]
+impl<T> crate::marker::PartialOrdTransparent for Name<T> {}
+#[cfg(not(feature = "impl_ord_transparent"))]
+impl<T> crate::marker::OrdTransparent for Name<T> {}
+#[cfg(not(feature = "impl_hash_transparent"))]
+impl<T> crate::marker::HashTransparent for Name<T> {}
+#[cfg(not(feature = "impl_debug_transparent"))]
+impl<T> crate::marker::DebugTransparent for Name<T> {}
+#[cfg(not(feature = "impl_display_transparent"))]
+impl<T> crate::marker::DisplayTransparent for Name<T> {}
 
 impl<T> Validator for Name<T> {
     type Err = std::convert::Infallible;

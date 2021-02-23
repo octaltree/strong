@@ -3,6 +3,7 @@
 extern crate diesel;
 
 mod buf;
+mod impl_convert;
 mod slice;
 pub use buf::StrongBuf;
 pub use slice::Strong;
@@ -10,7 +11,10 @@ pub use slice::Strong;
 /// Has marker traits for [`Validator`].
 pub mod marker;
 
-mod impl_convert;
+/// Requires `some_validators` feature.
+#[cfg(feature = "some_validators")]
+pub mod validators;
+
 /// Requires `diesel` feature.
 #[cfg(feature = "diesel")]
 pub mod impl_diesel;
@@ -18,10 +22,6 @@ pub mod impl_diesel;
 mod impl_juniper;
 #[cfg(feature = "serde")]
 mod impl_serde;
-
-/// Requires `some_validators` feature.
-#[cfg(feature = "some_validators")]
-pub mod validators;
 
 /// For [`Strong`]
 pub trait Validator {
@@ -32,9 +32,8 @@ pub trait Validator {
 }
 
 #[cfg(feature = "shorthand")]
-pub use StrongBuf as Str;
-
-#[cfg(feature = "shorthand")]
 pub use Strong as S;
+#[cfg(feature = "shorthand")]
+pub use StrongBuf as Str;
 
 pub use std::convert::TryFrom;
