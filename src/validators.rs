@@ -15,6 +15,8 @@ impl EqTransparent for Email {}
 impl PartialOrdTransparent for Email {}
 impl OrdTransparent for Email {}
 impl HashTransparent for Email {}
+impl DebugTransparent for Email {}
+impl DisplayTransparent for Email {}
 
 impl Validator for Email {
     type Err = InvalidEmail;
@@ -37,6 +39,8 @@ impl<T> EqTransparent for Name<T> {}
 impl<T> PartialOrdTransparent for Name<T> {}
 impl<T> OrdTransparent for Name<T> {}
 impl<T> HashTransparent for Name<T> {}
+impl<T> DebugTransparent for Name<T> {}
+impl<T> DisplayTransparent for Name<T> {}
 
 impl<T> Validator for Name<T> {
     type Err = std::convert::Infallible;
