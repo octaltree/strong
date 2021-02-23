@@ -14,7 +14,7 @@ pub mod validators;
 
 /// For [`Strong`]
 pub trait Validator {
-    type Err: std::fmt::Debug;
+    type Err;
     #[allow(unused_variables)]
     #[inline]
     fn validate(raw: &str) -> Result<(), Self::Err> { Ok(()) }
