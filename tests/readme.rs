@@ -1,9 +1,10 @@
+#[test]
 fn first() {
     use strong::{validators::Email, Strong, StrongBuf, Validator};
 
     fn login(_email: &Strong<Email>, _password: &Strong<Password>) {}
 
-    let email: StrongBuf<Email> = StrongBuf::<Email>::validate("a".into()).unwrap();
+    let email: StrongBuf<Email> = StrongBuf::<Email>::validate("a@example.com".into()).unwrap();
     let password: &Strong<Password> = Strong::<Password>::validate("b").unwrap();
     login(&email, password);
 

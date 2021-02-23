@@ -29,7 +29,7 @@ impl Validator for Password {
     type Err = std::convert::Infallible;
 }
 
-let email: StrongBuf<Email> = StrongBuf::<Email>::validate("a".into()).unwrap();
+let email: StrongBuf<Email> = StrongBuf::<Email>::validate("a@example.com".into()).unwrap();
 let password: &Strong<Password> = Strong::<Password>::validate("b").unwrap();
 ```
 
