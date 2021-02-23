@@ -38,3 +38,15 @@ where
         serializer.serialize_str(self.as_str())
     }
 }
+
+impl<Ctx> Serialize for StrongBuf<Ctx>
+where
+    Ctx: Validator
+{
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer
+    {
+        serializer.serialize_str(self.as_str())
+    }
+}
