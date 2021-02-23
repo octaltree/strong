@@ -9,8 +9,11 @@ mod imp {
     use std::{marker::PhantomData, ops::Deref};
 
     /// Strongly typed [`String`]
-    #[cfg_attr(feature = "diesel", derive(FromSqlRow, AsExpression))]
-    #[sql_type = "SqlStrong<Ctx>"]
+    #[cfg_attr(
+        feature = "diesel",
+        derive(FromSqlRow, AsExpression),
+        sql_type = "SqlStrong<Ctx>"
+    )]
     pub struct StrongBuf<Ctx: Validator> {
         phantom: PhantomData<Ctx>,
         inner: String

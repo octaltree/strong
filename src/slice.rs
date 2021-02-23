@@ -10,9 +10,12 @@ mod imp {
 
     /// Strongly typed [`str`]
     #[allow(non_camel_case_types)]
-    #[cfg_attr(feature = "diesel", derive(AsExpression))]
-    #[sql_type = "SqlStrong<Ctx>"]
-    #[diesel(not_sized)]
+    #[cfg_attr(
+        feature = "diesel",
+        derive(AsExpression),
+        sql_type = "SqlStrong<Ctx>",
+        diesel(not_sized)
+    )]
     #[repr(transparent)]
     pub struct Strong<Ctx: Validator> {
         phantom: PhantomData<Ctx>,
