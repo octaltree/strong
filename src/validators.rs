@@ -8,6 +8,7 @@ pub struct InvalidEmail {
     raw: String
 }
 
+#[cfg_attr(feature = "diesel", derive(SqlType, QueryId))]
 pub enum Email {}
 
 impl PartialEqTransparent for Email {}
@@ -30,6 +31,7 @@ impl Validator for Email {
     }
 }
 
+#[cfg_attr(feature = "diesel", derive(SqlType, QueryId))]
 pub struct Name<T> {
     phantom: PhantomData<T>
 }
