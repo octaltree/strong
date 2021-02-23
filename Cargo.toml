@@ -25,4 +25,4 @@ some_validators = ["validator", "thiserror"]
 shorthand = []
 
 [package.metadata.docs.rs]
-features = ["some_validators"]
+features = ["some_validators", "diesel", "serde", "juniper"]

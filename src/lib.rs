@@ -11,6 +11,7 @@ pub use slice::Strong;
 pub mod marker;
 
 mod impl_convert;
+/// Requires `diesel` feature.
 #[cfg(feature = "diesel")]
 pub mod impl_diesel;
 #[cfg(feature = "juniper")]
