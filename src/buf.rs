@@ -3,11 +3,14 @@ use crate::{Strong, Validator};
 pub use imp::StrongBuf;
 
 mod imp {
+    #[cfg(feature = "diesel")]
+    use crate::impl_diesel::SqlStrong;
     use crate::{Strong, Validator};
     use std::{marker::PhantomData, ops::Deref};
 
     /// Strongly typed [`String`]
-    #[cfg_attr(feature = "diesel", derive(FromSqlRow))]
+    #[cfg_attr(feature = "diesel", derive(FromSqlRow, AsExpression))]
+    #[sql_type = "SqlStrong<Ctx>"]
     pub struct StrongBuf<Ctx: Validator> {
         phantom: PhantomData<Ctx>,
         inner: String
