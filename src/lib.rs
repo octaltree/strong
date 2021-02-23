@@ -28,13 +28,6 @@ pub trait Validator {
     #[allow(unused_variables)]
     #[inline]
     fn validate(raw: &str) -> Result<(), Self::Err> { Ok(()) }
-
-    // fn try_from<S, T>(raw: S) -> Result<T, Self::Err>
-    // where
-    //    T: TryFrom<S>
-    //{
-    //    TryFrom::try_from(raw)
-    //}
 }
 
 #[cfg(feature = "shorthand")]
