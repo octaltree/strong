@@ -59,7 +59,8 @@ mod imp {
 impl<Ctx: Validator> StrongBuf<Ctx> {
     /// Constructs from [`Vec<u8>`] without validation.
     /// ## Safety
-    /// This function allows us to create invalid [`StrongBuf`].
+    /// This function allows us to create invalid [`StrongBuf`],
+    /// and it may not even be a valid utf-8.
     #[inline]
     pub unsafe fn from_utf8_unchecked(bytes: Vec<u8>) -> Self {
         Self::no_validate(String::from_utf8_unchecked(bytes))
