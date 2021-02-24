@@ -60,6 +60,23 @@ impl<Ctx: Validator> Strong<Ctx> {
         unsafe { StrongBuf::no_validate(self.as_str().to_string()) }
     }
 
+    pub fn count_chars(&self) -> usize { self.as_str().chars().count() }
+
+    /// Map with function: &str -> &str and validation
+    pub fn map<F>(&self, f: F) -> Result<&Strong<Ctx>, Ctx::Err>
+    where
+        F: FnOnce(&str) -> &str
+    {
+        let s = f(self.as_str());
+        Strong::validate(s)
+    }
+
+    pub fn trim(&self) -> Result<&Strong<Ctx>, Ctx::Err> { self.map(str::trim) }
+
+    pub fn trim_start(&self) -> Result<&Strong<Ctx>, Ctx::Err> { self.map(str::trim_start) }
+
+    pub fn trim_end(&self) -> Result<&Strong<Ctx>, Ctx::Err> { self.map(str::trim_end) }
+
     // TODO: Should I implement str methods?
 }
 

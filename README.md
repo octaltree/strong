@@ -41,7 +41,7 @@ let email: Str<Email> = Str::validate("foo".to_string()).unwrap();
 ```
 
 ## License
-Licensed under MIT license ([LICENSE-MIT](LICENSE-MIT) or https://opensource.org/licenses/MIT)
+Licensed under MIT license ([LICENSE-MIT](LICENSE) or https://opensource.org/licenses/MIT)
 
 ### Contributing
 welcome!

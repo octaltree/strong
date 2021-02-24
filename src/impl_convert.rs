@@ -34,8 +34,9 @@ where
 }
 
 fn _impl_from() {
-    use std::borrow::Cow;
+    use std::{borrow::Cow, rc::Rc, sync::Arc};
 
+    /// Needs allocation
     impl<Ctx> From<&Strong<Ctx>> for Box<Strong<Ctx>>
     where
         Ctx: Validator
@@ -79,34 +80,72 @@ fn _impl_from() {
             }
         }
     }
+
+    impl<'a, Ctx> From<&'a Strong<Ctx>> for Cow<'a, Strong<Ctx>>
+    where
+        Ctx: Validator
+    {
+        #[inline]
+        fn from(s: &'a Strong<Ctx>) -> Cow<'a, Strong<Ctx>> { Cow::Borrowed(s) }
+    }
+
+    impl<'a, Ctx> From<StrongBuf<Ctx>> for Cow<'a, Strong<Ctx>>
+    where
+        Ctx: Validator
+    {
+        #[inline]
+        fn from(s: StrongBuf<Ctx>) -> Cow<'a, Strong<Ctx>> { Cow::Owned(s) }
+    }
+
+    impl<Ctx> From<StrongBuf<Ctx>> for Arc<Strong<Ctx>>
+    where
+        Ctx: Validator
+    {
+        #[inline]
+        fn from(s: StrongBuf<Ctx>) -> Self {
+            let a: Arc<str> = Arc::from(s.into_string());
+            let rw = Arc::into_raw(a) as *const Strong<Ctx>;
+            unsafe { Arc::from_raw(rw) }
+        }
+    }
+
+    impl<Ctx> From<StrongBuf<Ctx>> for Rc<Strong<Ctx>>
+    where
+        Ctx: Validator
+    {
+        #[inline]
+        fn from(s: StrongBuf<Ctx>) -> Self {
+            let a: Rc<str> = Rc::from(s.into_string());
+            let rw = Rc::into_raw(a) as *const Strong<Ctx>;
+            unsafe { Rc::from_raw(rw) }
+        }
+    }
+
+    /// Needs allocation
+    impl<Ctx> From<&Strong<Ctx>> for Arc<Strong<Ctx>>
+    where
+        Ctx: Validator
+    {
+        fn from(s: &Strong<Ctx>) -> Self {
+            let boxed: Arc<str> = s.as_str().into();
+            let rw = Arc::into_raw(boxed) as *const Strong<Ctx>;
+            unsafe { Arc::from_raw(rw) }
+        }
+    }
+
+    /// Needs allocation
+    impl<Ctx> From<&Strong<Ctx>> for Rc<Strong<Ctx>>
+    where
+        Ctx: Validator
+    {
+        fn from(s: &Strong<Ctx>) -> Self {
+            let boxed: Rc<str> = s.as_str().into();
+            let rw = Rc::into_raw(boxed) as *const Strong<Ctx>;
+            unsafe { Rc::from_raw(rw) }
+        }
+    }
+
+    // Needs allocation
+    // 1460: impl<T: ?Sized + AsRef<OsStr>> From<&T> for PathBuf {
+    // 1588: impl<'a> From<Cow<'a, Path>> for PathBuf {
 }
-
-// TODO: Box, Rc, Arc, Cow
-// 1460: impl<T: ?Sized + AsRef<OsStr>> From<&T> for PathBuf {
-// 1468: impl From<OsString> for PathBuf {
-// 1490: impl From<String> for PathBuf {
-// 1501: impl FromStr for PathBuf {
-// 1511: impl<P: AsRef<Path>> iter::FromIterator<P> for PathBuf {
-// 1564: impl<'a> From<&'a Path> for Cow<'a, Path> {
-// 1572: impl<'a> From<PathBuf> for Cow<'a, Path> {
-// 1580: impl<'a> From<&'a PathBuf> for Cow<'a, Path> {
-// 1588: impl<'a> From<Cow<'a, Path>> for PathBuf {
-// 1596: impl From<PathBuf> for Arc<Path> {
-// 1606: impl From<&Path> for Arc<Path> {
-// 1616: impl From<PathBuf> for Rc<Path> {
-// 1626: impl From<&Path> for Rc<Path> {
-
-// impl<'_> From<&'_ String> for String
-// impl<'_> From<&'_ mut str> for String
-// impl<'_> From<&'_ str> for String
-// impl<'a> From<&'a String> for Cow<'a, str>
-// impl<'a> From<Cow<'a, str>> for String
-// impl From<String> for Rc<str>
-// impl From<String> for Vec<u8, Global>
-// impl<'a> From<String> for Cow<'a, str>
-// impl From<String> for Arc<str>
-// impl From<String> for Box<dyn Error + Send + Sync>
-// impl From<String> for Box<dyn Error>
-// impl From<String> for OsString
-// impl From<String> for PathBuf
-// impl From<char> for String
