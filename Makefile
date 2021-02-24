@@ -13,7 +13,7 @@ test:
 	cargo test --all-features --all-targets
 
 doc:
-	rustup run stable cargo doc --all-features
+	cargo doc --all-features
 
 build:
 	cargo build --all-features --all-targets
