@@ -35,5 +35,3 @@ pub trait Validator {
 pub use Strong as S;
 #[cfg(feature = "shorthand")]
 pub use StrongBuf as Str;
-
-pub use std::convert::TryFrom;
