@@ -18,8 +18,6 @@ pub mod validators;
 /// Requires `diesel` feature.
 #[cfg(feature = "diesel")]
 pub mod impl_diesel;
-#[cfg(feature = "juniper")]
-mod impl_juniper;
 #[cfg(feature = "serde")]
 mod impl_serde;
 
